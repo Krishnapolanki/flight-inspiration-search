@@ -8,18 +8,24 @@ import {
 import { Observable } from 'rxjs';
 import { AuthService } from '../api/auth';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class TokenHttpInterceptorService implements HttpInterceptor {
-  constructor(private authService: AuthService) {}
+  token: string | null;
+  constructor(private authService: AuthService) {
+    this.token = this.authService.getToken();
+  }
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    let request = req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${this.authService.getToken()}`,
-      },
-    });
-    return next.handle(request);
+    if (!req.url.endsWith('/oauth2/token')) {
+      let request = req.clone({
+        setHeaders: {
+          Authorization: `Bearer ${this.token}`,
+        },
+      });
+      return next.handle(request);
+    }
+    return next.handle(req);
   }
 }

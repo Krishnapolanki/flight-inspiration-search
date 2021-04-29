@@ -3,7 +3,7 @@ import { grantType, clientId, clientSecret, authUrl } from './oauth';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class AuthService {
   body = new HttpParams()
     .set('grant_type', grantType)

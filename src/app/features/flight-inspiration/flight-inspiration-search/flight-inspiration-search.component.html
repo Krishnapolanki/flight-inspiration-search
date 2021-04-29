@@ -1,1 +1,59 @@
-<p>flight-inspiration-search works!</p>
+<form class="search-form" [formGroup]="form">
+  <div fxLayout="column" fxLayoutGap="30px">
+    <div fxLayout="row" fxLayoutGap="30px">
+      <div>
+        <mat-form-field class="example-full-width">
+          <mat-label>Origin</mat-label>
+          <input
+            matInput
+            placeholder="Origin"
+            type="text"
+            formControlName="origin"
+          />
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="example-full-width">
+          <mat-label>Departure Date</mat-label>
+          <input
+            matInput
+            placeholder="Departure Date"
+            formControlName="departureDate"
+          />
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-checkbox class="example-full-width" formControlName="oneWay"
+          >Is One Way</mat-checkbox
+        >
+      </div>
+      <div>
+        <mat-form-field class="example-full-width">
+          <mat-label>Duration</mat-label>
+          <input matInput placeholder="Duration" formControlName="duration" />
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-checkbox class="example-full-width" formControlName="nonStop"
+          >Is Nonstop</mat-checkbox
+        >
+      </div>
+      <div>
+        <mat-form-field class="example-full-width">
+          <mat-label>Max Price</mat-label>
+          <input matInput placeholder="Max Price" formControlName="maxPrice" />
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-select formControlName="viewBy">
+          <mat-option *ngFor="let viewType of viewTypes" [value]="viewType">
+            {{ viewType }}
+          </mat-option>
+        </mat-select>
+      </div>
+    </div>
+  </div>
+  <div>
+    <button type="submit" (click)="search()">Search</button>
+  </div>
+</form>

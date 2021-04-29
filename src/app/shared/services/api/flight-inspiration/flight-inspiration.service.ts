@@ -1,4 +1,8 @@
-import { ApiResponse, SearchResponse } from './../../../models';
+import {
+  ApiResponse,
+  SearchResponse,
+  SearchViewModel,
+} from './../../../models';
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -11,9 +15,11 @@ const URL = `https://test.api.amadeus.com/v1/shopping/flight-destinations`;
 export class FlightInspirationService {
   constructor(private http: HttpClient) {}
 
-  getSearchResults(origin: string): Observable<SearchResponse[]> {
+  getSearchResults(
+    searchCriteria: SearchViewModel
+  ): Observable<SearchResponse[]> {
     return this.http
-      .get<ApiResponse>(`${URL}?origin=${origin}`)
+      .get<ApiResponse>(`${URL}?origin=${searchCriteria.origin}`)
       .pipe(map((response: ApiResponse) => response.data));
   }
 }
