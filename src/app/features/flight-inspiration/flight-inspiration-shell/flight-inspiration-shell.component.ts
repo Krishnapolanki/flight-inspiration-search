@@ -1,9 +1,10 @@
-import { FlightInspirationService } from './../../../shared/services/api/flight-inspiration/flight-inspiration.service';
-import { SearchViewModel } from './../../../shared/models/search.model';
-import { AuthService } from './../../../shared/services/api/auth/auth.service';
+import { catchError } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { SearchResponse } from 'src/app/shared/models';
+import { Observable, of } from 'rxjs';
+import { SearchResponse, ApiErrorResponse } from 'src/app/shared/models';
+import { SearchViewModel } from './../../../shared/models/search.model';
+import { FlightInspirationService } from './../../../shared/services/api/flight-inspiration/flight-inspiration.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'fi-shell',
@@ -13,12 +14,20 @@ import { SearchResponse } from 'src/app/shared/models';
 export class FlightInspirationShellComponent implements OnInit {
   searchResults$!: Observable<SearchResponse[]>;
 
-  constructor(private flightInspirationService: FlightInspirationService) {}
+  constructor(
+    private flightInspirationService: FlightInspirationService,
+    private _snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {}
   getResults(searchCriteria: SearchViewModel) {
-    this.searchResults$ = this.flightInspirationService.getSearchResults(
-      searchCriteria
-    );
+    this.searchResults$ = this.flightInspirationService
+      .getSearchResults(searchCriteria)
+      .pipe(
+        catchError((error: ApiErrorResponse) => {
+          this._snackBar.open(error.details, '', { duration: 1000 });
+          return of([]);
+        })
+      );
   }
 }
